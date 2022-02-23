@@ -1,0 +1,16 @@
+$ff-roboto: "Roboto", sans-serif;
+
+$breakpoints: (
+  "small": 599px,
+  "mobile": 739px,
+  "tablet": 1023px,
+  "tablet-pro": 1365px,
+) !default;
+
+$z-negative: -1;
+$z-elevate: 1;
+$z-sticky: 100;
+$z-drawer: 200;
+$z-dropdown: 400;
+$z-modal: 500;
+$z-popover: 1000;
