@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './assets/styles/reset.scss';
 import './assets/styles/global.scss';
+import './i18n';
 import reportWebVitals from './reportWebVitals';
 import store from './store/store';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Suspense fallback="">
     <Provider store={store}>
-      <BrowserRouter>
+      <React.StrictMode>
+        <BrowserRouter>
           <App />
-      </BrowserRouter>
+        </BrowserRouter>
+      </React.StrictMode>
     </Provider>
-  </React.StrictMode>,
+  </Suspense>,
   document.getElementById('root')
 );
 
