@@ -1,9 +1,9 @@
-
+import Header from './components/Header/index';
 
 function App() {
   return (
     <div className="app">
-      <p>123</p>
+      <Header />
     </div>
   );
 }

@@ -1,7 +1,6 @@
 @import "./variables.scss";
 
 html {
-  font-size: 62.5%;
   box-sizing: border-box;
 }
 * {
@@ -43,5 +42,4 @@ body {
   font-family: $ff-roboto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 1.4rem;
 }
