@@ -3,5 +3,12 @@
   "Login": "Login",
   "Logout": "Logout",
   "Search": "Search...",
-  "Account": "Account"
+  "Account": "Account",
+  "en": "EN",
+  "Product category": "PRODUCT CATEGORY",
+  "Choose price range": "CHOOSE PRICE RANGE",
+  "Apply": "APPLY",
+  "Service": "SERVICE",
+  "Promotion": "Promotion",
+  "Free shipping": "Free shipping"
 }
