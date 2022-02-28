@@ -51,6 +51,7 @@ export default function Header() {
             </Box>
             <Box className={classes.account}>
               <Button color="inherit" onClick={handleChangeLanguage}>
+                {t('en')}
                 <LanguageIcon />
               </Button>
               <Button color="inherit">{t('Login')}</Button>

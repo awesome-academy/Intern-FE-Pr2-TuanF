@@ -2,7 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 const axiosClient = axios.create({
-  baseURL: '',
+  baseURL: 'https://api.ezfrontend.com/',
   headers: {
     'content-type': 'application/json',
   },
