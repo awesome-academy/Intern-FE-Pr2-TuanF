@@ -7,6 +7,7 @@ import FilterViewer from '../components/FilterViewer';
 import ProductFilters from '../components/ProductFilters';
 import ProductList from '../components/ProductList';
 import ProductPagination from '../components/ProductPagination';
+import ProductSkeletonList from '../components/ProductSkeletonList';
 import ProductSoft from '../components/ProductSoft';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function ListPage(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { product, filters } = useSelector((state) => state.products);
+  const { product, filters, isLoading } = useSelector((state) => state.products);
   const { data = [], pagination } = product;
 
   useEffect(() => {
@@ -50,7 +51,7 @@ function ListPage(props) {
             <Paper elevation={0}>
               <ProductSoft />
               <FilterViewer />
-              <ProductList data={data} />
+              {isLoading ? <ProductSkeletonList length={12} /> : <ProductList data={data} />}
               <Box className={classes.pagination}>
                 <ProductPagination pagination={pagination} />
               </Box>
