@@ -4,7 +4,7 @@ import productApi from '../../api/productApi';
 const productSlice = createSlice({
   name: 'products',
   initialState: {
-    product: [],
+    product: {},
     isLoading: false,
     filters: {
       _page: 1,
@@ -12,7 +12,7 @@ const productSlice = createSlice({
     },
   },
   reducers: {
-    setFilter(state, action) {
+    setFilters(state, action) {
       state.filters = action.payload;
     },
   },
@@ -40,5 +40,6 @@ export const productAPI = createAsyncThunk('products/getAll', async (filter) => 
   }
 });
 
-const { reducer } = productSlice;
+const { reducer, actions } = productSlice;
+export const { setFilters } = actions;
 export default reducer;

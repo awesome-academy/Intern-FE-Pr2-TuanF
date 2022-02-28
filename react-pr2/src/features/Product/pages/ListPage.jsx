@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Pagination, Paper } from '@mui/material';
+import { Box, Container, Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import { productAPI } from '../../../store/Slice/productSlice';
 import FilterViewer from '../components/FilterViewer';
 import ProductFilters from '../components/ProductFilters';
 import ProductList from '../components/ProductList';
+import ProductPagination from '../components/ProductPagination';
 import ProductSoft from '../components/ProductSoft';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
   right: {
     flex: '1 1 0',
+  },
+  pagination: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'center',
+    marginTop: '20px',
+    paddingBottom: '10px',
   },
 }));
 
@@ -44,7 +52,7 @@ function ListPage(props) {
               <FilterViewer />
               <ProductList data={data} />
               <Box className={classes.pagination}>
-                <Pagination></Pagination>
+                <ProductPagination pagination={pagination} />
               </Box>
             </Paper>
           </Grid>
