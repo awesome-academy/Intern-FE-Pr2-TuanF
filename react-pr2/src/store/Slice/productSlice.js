@@ -9,6 +9,7 @@ const productSlice = createSlice({
     filters: {
       _page: 1,
       _limit: 12,
+      _sort: 'salePrice:ASC',
     },
   },
   reducers: {

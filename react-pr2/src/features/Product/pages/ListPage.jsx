@@ -2,7 +2,7 @@ import { Box, Container, Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { productAPI } from '../../../store/Slice/productSlice';
+import { productAPI, setFilters } from '../../../store/Slice/productSlice';
 import FilterViewer from '../components/FilterViewer';
 import ProductFilters from '../components/ProductFilters';
 import ProductList from '../components/ProductList';
@@ -37,6 +37,15 @@ function ListPage(props) {
     dispatch(productAPI(filters));
   }, [filters, dispatch]);
 
+  const handleSoftChange = (newSortValue) => {
+    dispatch(
+      setFilters({
+        ...filters,
+        _sort: newSortValue,
+      })
+    );
+  };
+
   return (
     <Box>
       <Container>
@@ -49,7 +58,7 @@ function ListPage(props) {
 
           <Grid item className={classes.right}>
             <Paper elevation={0}>
-              <ProductSoft />
+              <ProductSoft currentSoft={filters._sort} onChange={handleSoftChange} />
               <FilterViewer />
               {isLoading ? <ProductSkeletonList length={12} /> : <ProductList data={data} />}
               <Box className={classes.pagination}>
