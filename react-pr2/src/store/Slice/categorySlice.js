@@ -5,21 +5,12 @@ const categorySlice = createSlice({
   name: 'category',
   initialState: {
     category: [],
-    isLoading: false,
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(categoryAPI.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(categoryAPI.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.category = action.payload;
-      })
-      .addCase(categoryAPI.rejected, (state) => {
-        state.isLoading = false;
-      });
+    builder.addCase(categoryAPI.fulfilled, (state, action) => {
+      state.category = action.payload;
+    });
   },
 });
 

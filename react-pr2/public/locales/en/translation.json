@@ -10,5 +10,9 @@
   "Apply": "APPLY",
   "Service": "SERVICE",
   "Promotion": "Promotion",
-  "Free shipping": "Free shipping"
+  "Free shipping": "Free shipping",
+  "Price low to high": "Price low to high",
+  "Price high to low": "Price high to low",
+  "From": "Form",
+  "To": "To"
 }

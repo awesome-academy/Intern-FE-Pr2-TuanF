@@ -5,18 +5,9 @@ const productSlice = createSlice({
   name: 'products',
   initialState: {
     product: {},
-    isLoading: false,
-    filters: {
-      _page: 1,
-      _limit: 12,
-      _sort: 'salePrice:ASC',
-    },
+    isLoading: true,
   },
-  reducers: {
-    setFilters(state, action) {
-      state.filters = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(productAPI.pending, (state) => {
@@ -41,6 +32,5 @@ export const productAPI = createAsyncThunk('products/getAll', async (filter) => 
   }
 });
 
-const { reducer, actions } = productSlice;
-export const { setFilters } = actions;
+const { reducer } = productSlice;
 export default reducer;

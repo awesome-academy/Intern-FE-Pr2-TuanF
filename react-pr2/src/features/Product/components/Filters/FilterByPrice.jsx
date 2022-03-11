@@ -33,18 +33,34 @@ function FilterByPrice({ onChange }) {
     salePrice_lte: 0,
   });
 
+  const handleSubmit = () => {
+    if (onChange && Number.parseInt(values.salePrice_lte) > 0) onChange(values);
+    setValues({
+      salePrice_gte: 0,
+      salePrice_lte: 0,
+    });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
   return (
     <Box className={classes.root}>
       <Typography variant="subtitle2">{t('Choose price range')}</Typography>
 
       <Box className={classes.range}>
-        <TextField name="salePrice_gte" value={values.salePrice_gte} />
+        <TextField name="salePrice_gte" value={values.salePrice_gte} onChange={handleChange} />
         <span>-</span>
-        <TextField name="salePrice_lte" value={values.salePrice_lte} />
+        <TextField name="salePrice_lte" value={values.salePrice_lte} onChange={handleChange} />
       </Box>
 
-      <Button variant="outlined" size="small" color="primary">
-        {t('APPLY')}
+      <Button variant="outlined" size="small" color="primary" onClick={handleSubmit}>
+        {t('Apply')}
       </Button>
     </Box>
   );
