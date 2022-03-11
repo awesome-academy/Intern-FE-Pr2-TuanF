@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import { promotion, thumbnailURL, formatPrice } from '../../../utils/utils';
+import { formatPrice, promotion, thumbnailURL } from '../../../utils/utils';
 
 function Product({ thumbnail, name, salePrice, promotionPercent }) {
   return (
     <Box padding={1}>
-      <Box padding={1} minHeight={220}>
+      <Box padding={1} minHeight="215px">
         <img src={thumbnailURL(thumbnail)} alt={name} width="100%" />
       </Box>
       <Typography variant="body2">{name}</Typography>

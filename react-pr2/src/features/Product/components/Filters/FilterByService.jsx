@@ -23,6 +23,13 @@ function FilterByService({ filters = {}, onChange }) {
   const { t } = useTranslation();
   const classes = useStyles();
 
+  const handleChange = (e) => {
+    if (!onChange) return;
+
+    const { name, checked } = e.target;
+    onChange({ [name]: checked });
+  };
+
   const services = [
     { value: 'isPromotion', label: `${t('Promotion')}` },
     { value: 'isFreeShip', label: `${t('Free shipping')}` },
@@ -39,6 +46,7 @@ function FilterByService({ filters = {}, onChange }) {
               control={
                 <Checkbox
                   checked={Boolean(filters[service.value])}
+                  onChange={handleChange}
                   inputProps={{ 'aria-label': 'controlled' }}
                   name={service.value}
                 />

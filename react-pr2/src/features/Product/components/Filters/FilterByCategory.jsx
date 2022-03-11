@@ -39,13 +39,17 @@ function FilterByCategory({ onChange }) {
     dispatch(categoryAPI());
   }, [dispatch]);
 
+  const handleCategoryClick = (category) => {
+    onChange && onChange(category);
+  };
+
   return (
     <Box className={classes.root}>
       <Typography variant="subtitle2">{t('Product category')}</Typography>
 
       <ul className={classes.menu}>
         {categories.map((category) => (
-          <li key={category.id}>
+          <li key={category.id} onClick={() => handleCategoryClick(category)}>
             <Typography variant="body2">{category.name}</Typography>
           </li>
         ))}
