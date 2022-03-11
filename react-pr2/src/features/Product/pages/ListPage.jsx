@@ -12,11 +12,14 @@ import ProductPagination from '../components/ProductPagination';
 import ProductSkeletonByFilters from '../components/Filters/ProductSkeletonByFilters';
 import ProductSkeletonList from '../components/ProductSkeletonList';
 import ProductSoft from '../components/ProductSoft';
+import ProductBanner from '../components/ProductBanner';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   left: {
     width: '250px',
+    background: '#ffffff',
+    borderRight: '1px solid #efefef',
   },
   right: {
     flex: '1 1 0',
@@ -98,7 +101,8 @@ function ListPage(props) {
   return (
     <Box>
       <Container>
-        <Grid container spacing={1}>
+        <Grid container>
+          <ProductBanner />
           <Grid item className={classes.left}>
             <Paper elevation={0}>
               <ProductFilters filters={queryParams} onChange={handleFiltersChange} />

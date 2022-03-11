@@ -37,18 +37,18 @@ export default function Header() {
   };
 
   return (
-    <Box className={classes.header}>
-      <AppBar>
+    <Box>
+      <AppBar position="static">
         <Container>
           <Toolbar className={classes.header}>
             <Link to="/">
               <Box className={classes.logoIcon}>
-                <img src={logo} alt="logo" width={60} height={40} />
+                <img src={logo} alt="logo" width="60px" height="40px" />
               </Box>
             </Link>
-            <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               <SeacrchInput />
-            </Box>
+            </Typography>
             <Box className={classes.account}>
               <Button color="inherit" onClick={handleChangeLanguage}>
                 {t('en')}

@@ -15,6 +15,12 @@ export const formatPrice = (num) => {
   }).format(num);
 };
 
+export const slowLoading = async (delay = 1000) => {
+  return new Promise(function (resolve, reject) {
+    setTimeout(resolve, delay);
+  });
+};
+
 export const themeStyle = {
   grayColor: '#ddd',
   blueColor: '#1976d2',
