@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     alignItems: 'center',
     listStyle: 'none',
-    margin: '16px 0',
+    margin: '16px',
     '& > li': {
       pading: '8px',
       margin: 0,

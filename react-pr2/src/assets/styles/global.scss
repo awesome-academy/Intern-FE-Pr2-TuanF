@@ -34,12 +34,13 @@ a {
 }
 img {
   display: block;
-  max-width: 100%;
 }
 
 body {
   margin: 0;
   font-family: $ff-roboto;
+  background: $bg-grey;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
