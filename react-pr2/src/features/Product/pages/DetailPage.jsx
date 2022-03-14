@@ -15,6 +15,7 @@ import ProductReviews from '../components/Detail/ProductReviews';
 import ProductThumbnail from '../components/Detail/ProductThumbnail';
 import ProductSkeletonByFilters from '../components/Filters/ProductSkeletonByFilters';
 import ProductDetail from '../components/ProductDetail';
+import { setAddToCart } from '../../../store/Slice/cartSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -57,6 +58,15 @@ function DetailPage(props) {
     }
   }, [product, productId, dispatch]);
 
+  const handleAddToCartSubmit = ({ quantity }) => {
+    const action = setAddToCart({
+      id: product.id,
+      product,
+      quantity,
+    });
+    dispatch(action);
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -78,7 +88,7 @@ function DetailPage(props) {
             </Grid>
             <Grid item className={classes.right}>
               <ProductDetail {...product} />
-              <AddToCartForm />
+              <AddToCartForm onSubmit={handleAddToCartSubmit} />
             </Grid>
           </Grid>
         </Paper>
