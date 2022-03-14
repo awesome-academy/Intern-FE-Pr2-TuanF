@@ -1,12 +1,17 @@
-import { Box, Container, Grid, LinearProgress, Paper } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Box, Container, Grid, LinearProgress, Paper, Tab } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { productApiId } from '../../../store/Slice/productDetailSlice';
 import AddToCartForm from '../components/Detail/AddToCartForm';
 import DetailBreadcrumb from '../components/Detail/DetailBreadcrumb';
+import ProductAdditional from '../components/Detail/ProductAdditional';
+import ProductDescription from '../components/Detail/ProductDescription';
+import ProductReviews from '../components/Detail/ProductReviews';
 import ProductThumbnail from '../components/Detail/ProductThumbnail';
 import ProductSkeletonByFilters from '../components/Filters/ProductSkeletonByFilters';
 import ProductDetail from '../components/ProductDetail';
@@ -28,10 +33,16 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: '100%',
   },
+  tabs: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
 
 function DetailPage(props) {
   const classes = useStyles();
+  const [value, setValue] = useState('1');
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
     params: { productId },
@@ -45,6 +56,10 @@ function DetailPage(props) {
       dispatch(productApiId(productId));
     }
   }, [product, productId, dispatch]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   return (
     <Box className={classes.root}>
@@ -67,6 +82,25 @@ function DetailPage(props) {
             </Grid>
           </Grid>
         </Paper>
+
+        <TabContext value={value}>
+          <Box sx={{ marginTop: '16px', borderColor: 'divider' }} className={classes.tabs}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label={t('Description')} value="1" />
+              <Tab label={t('Additional Infomation')} value="2" />
+              <Tab label={t('Reviews')} value="3" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            <ProductDescription product={product} />
+          </TabPanel>
+          <TabPanel value="2">
+            <ProductAdditional />
+          </TabPanel>
+          <TabPanel value="3">
+            <ProductReviews />
+          </TabPanel>
+        </TabContext>
       </Container>
     </Box>
   );

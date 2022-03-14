@@ -73,6 +73,7 @@ function ListPage(props) {
     const filters = {
       ...queryParams,
       _sort: newSortValue,
+      _page: 1,
     };
     history.push({
       pathname: history.location.pathname,
@@ -84,6 +85,7 @@ function ListPage(props) {
     const filters = {
       ...queryParams,
       ...newFilters,
+      _page: 1,
     };
     history.push({
       pathname: history.location.pathname,
