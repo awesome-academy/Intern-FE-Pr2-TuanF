@@ -31,7 +31,7 @@ const FILTER_LIST = [
     isRemovable: false,
     onRemove: () => {},
     onToggle: (filters) => {
-      const newFilters = { ...filters };
+      const newFilters = { ...filters, _page: 1 };
       if (newFilters.isFreeShip) {
         newFilters.isFreeShip = false;
       } else {
