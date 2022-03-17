@@ -7,16 +7,20 @@ import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import queryString from 'query-string';
+import { useDispatch } from 'react-redux';
+import { toggleMiniCartClick } from '../../../../store/Slice/cartSlice';
 
 export default function DetailBreadcrumb({ product = {} }) {
   const { category = '' } = product;
   const { name, id } = category;
   const history = useHistory();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   function handleClickHome(event) {
     event.preventDefault();
     history.push('/');
+    dispatch(toggleMiniCartClick(false));
   }
 
   function handleClickName(event) {
@@ -30,6 +34,7 @@ export default function DetailBreadcrumb({ product = {} }) {
     };
     const params = queryString.stringify(filters);
     history.push(`/?${params}`);
+    dispatch(toggleMiniCartClick(false));
   }
 
   const breadcrumbs = [
