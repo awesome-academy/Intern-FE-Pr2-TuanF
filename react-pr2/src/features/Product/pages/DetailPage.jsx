@@ -15,7 +15,7 @@ import ProductReviews from '../components/Detail/ProductReviews';
 import ProductThumbnail from '../components/Detail/ProductThumbnail';
 import ProductSkeletonByFilters from '../components/Filters/ProductSkeletonByFilters';
 import ProductDetail from '../components/ProductDetail';
-import { setAddToCart } from '../../../store/Slice/cartSlice';
+import { setAddToCart, toggleMiniCartClick } from '../../../store/Slice/cartSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -65,6 +65,7 @@ function DetailPage(props) {
       quantity,
     });
     dispatch(action);
+    dispatch(toggleMiniCartClick(true));
   };
 
   const handleChange = (event, newValue) => {
@@ -105,7 +106,7 @@ function DetailPage(props) {
             <ProductDescription product={product} />
           </TabPanel>
           <TabPanel value="2">
-            <ProductAdditional />
+            <ProductAdditional product={product} />
           </TabPanel>
           <TabPanel value="3">
             <ProductReviews />

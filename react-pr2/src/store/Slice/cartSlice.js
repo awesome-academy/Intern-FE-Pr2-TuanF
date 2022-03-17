@@ -7,7 +7,7 @@ const cartSlice = createSlice({
     cartItem: [],
   },
   reducers: {
-    toggleMiniCart(state, action) {
+    toggleMiniCartClick(state, action) {
       state.showMiniCart = action.payload;
     },
     setAddToCart(state, action) {
@@ -29,10 +29,13 @@ const cartSlice = createSlice({
     removeFromCart(state, action) {
       state.cartItem = state.cartItem.filter((item) => item.id !== action.payload);
     },
+    removeMultiple(state, action) {
+      state.cartItem = state.cartItem.filter((item) => item.id !== action.payload);
+    },
   },
   extraReducers: (builder) => {},
 });
 
 const { reducer, actions } = cartSlice;
-export const { toggleMiniCart, removeFromCart, setQuantity, setAddToCart } = actions;
+export const { removeFromCart, setQuantity, setAddToCart, removeMultiple, toggleMiniCartClick } = actions;
 export default reducer;
