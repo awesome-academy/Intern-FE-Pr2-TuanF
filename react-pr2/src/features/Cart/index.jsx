@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Container } from '@mui/material';
+import { Button, Container, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import { red } from '@mui/material/colors';
@@ -14,17 +14,19 @@ import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { removeFromCart } from '../../store/Slice/cartSlice';
 import { formatPrice, thumbnailURL } from '../../utils/utils';
 import CartBreadcrumb from './components/CartBreadcrumb';
 import CartEmpty from './components/CartEmpty';
 import EnhancedTableHead from './components/EnhancedTableHead';
 import EnhancedTableToolbar from './components/EnhancedTableToolbar';
-import { cartItemCountSelector, cartItemSelector } from './selectors';
 import Quantity from './components/Quantity';
-import { removeFromCart } from '../../store/Slice/cartSlice';
-import { useTranslation } from 'react-i18next';
 import './index.scss';
+import { cartItemCountSelector, cartItemSelector, cartTotaltSelector } from './selectors';
+import { TAX_RATE } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -44,6 +46,12 @@ const useStyles = makeStyles((theme) => ({
   totalItem: {
     color: red[400],
   },
+  left: {
+    flex: '1 1 0',
+  },
+  right: {
+    width: '350px',
+  },
 }));
 
 export default function CartFeature() {
@@ -53,9 +61,11 @@ export default function CartFeature() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { t } = useTranslation();
+  const history = useHistory();
 
   const cartItemsCount = useSelector(cartItemCountSelector);
   const cartItems = useSelector(cartItemSelector);
+  const cartTotal = useSelector(cartTotaltSelector);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -95,104 +105,166 @@ export default function CartFeature() {
     dispatch(removeFromCart(id));
   };
 
+  const handleBtn = () => {
+    history.push('/checkout');
+  };
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
+  const invoiceTaxes = TAX_RATE * cartTotal;
+  const total = cartTotal + invoiceTaxes;
 
   return (
     <Box sx={{ width: '100%' }}>
       <Container>
         <CartBreadcrumb />
-        <Paper sx={{ width: '100%', mb: 2 }} elevation={0}>
-          {cartItemsCount > 0 ? (
-            <>
-              <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
-              <Box>
-                <TableContainer>
-                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
-                    <EnhancedTableHead
-                      numSelected={selected.length}
-                      onSelectAllClick={handleSelectAllClick}
-                      rowCount={cartItems.length}
-                    />
-                    <TableBody>
-                      {cartItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                        const { product, quantity } = row;
-                        const { salePrice, originalPrice, promotionPercent, name, thumbnail, id } = product;
-                        const isItemSelected = isSelected(id);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+        <Grid container>
+          <Grid item className={classes.left}>
+            <Paper sx={{ width: '100%', mb: 2 }} elevation={0}>
+              {cartItemsCount > 0 ? (
+                <>
+                  <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
+                  <Box>
+                    <TableContainer>
+                      <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="medium">
+                        <EnhancedTableHead
+                          numSelected={selected.length}
+                          onSelectAllClick={handleSelectAllClick}
+                          rowCount={cartItems.length}
+                        />
+                        <TableBody>
+                          {cartItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                            const { product, quantity } = row;
+                            const { salePrice, originalPrice, promotionPercent, name, thumbnail, id } = product;
+                            const isItemSelected = isSelected(id);
+                            const labelId = `enhanced-table-checkbox-${index}`;
 
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={index}
-                            selected={isItemSelected}
-                          >
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                onClick={(event) => handleClick(event, id)}
-                                color="primary"
-                                checked={isItemSelected}
-                                inputProps={{
-                                  'aria-labelledby': labelId,
-                                }}
-                              />
-                            </TableCell>
-                            <TableCell component="th" id={labelId} scope="row" padding="none">
-                              <Box className={classes.thumbnail}>
-                                <img src={thumbnailURL(thumbnail)} alt={name} width="80px" />
-                                <Box ml={2}>{name}</Box>
-                              </Box>
-                            </TableCell>
-                            <TableCell align="left">
-                              <Box>
-                                <Box component="span" className={classes.salePrice}>
-                                  {formatPrice(salePrice)}
-                                </Box>
-                                {promotionPercent > 0 && (
-                                  <Box component="span" className={classes.originalPrice}>
-                                    {formatPrice(originalPrice)}
+                            return (
+                              <TableRow
+                                hover
+                                role="checkbox"
+                                aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={index}
+                                selected={isItemSelected}
+                              >
+                                <TableCell padding="checkbox">
+                                  <Checkbox
+                                    onClick={(event) => handleClick(event, id)}
+                                    color="primary"
+                                    checked={isItemSelected}
+                                    inputProps={{
+                                      'aria-labelledby': labelId,
+                                    }}
+                                  />
+                                </TableCell>
+                                <TableCell component="th" id={labelId} scope="row" padding="none">
+                                  <Box className={classes.thumbnail}>
+                                    <img src={thumbnailURL(thumbnail)} alt={name} width="80px" />
+                                    <Box ml={2}>{name}</Box>
                                   </Box>
-                                )}
-                              </Box>
-                            </TableCell>
-                            <TableCell align="center">
-                              <Quantity id={id} quantity={quantity} />
-                            </TableCell>
-                            <TableCell align="left">
-                              <Box component="span" className={classes.totalItem}>
-                                {formatPrice(salePrice * quantity)}
-                              </Box>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Tooltip title={t('Delete')}>
-                                <IconButton onClick={(event) => handleDeleteItem(event, id)}>
-                                  <DeleteIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  component="div"
-                  count={cartItems.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </Box>
-            </>
-          ) : (
-            <CartEmpty />
-          )}
-        </Paper>
+                                </TableCell>
+                                <TableCell align="left">
+                                  <Box>
+                                    <Box component="span" className={classes.salePrice}>
+                                      {formatPrice(salePrice)}
+                                    </Box>
+                                    {promotionPercent > 0 && (
+                                      <Box component="span" className={classes.originalPrice}>
+                                        {formatPrice(originalPrice)}
+                                      </Box>
+                                    )}
+                                  </Box>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Quantity id={id} quantity={quantity} />
+                                </TableCell>
+                                <TableCell align="left">
+                                  <Box component="span" className={classes.totalItem}>
+                                    {formatPrice(salePrice * quantity)}
+                                  </Box>
+                                </TableCell>
+                                <TableCell align="right">
+                                  <Tooltip title={t('Delete')}>
+                                    <IconButton onClick={(event) => handleDeleteItem(event, id)}>
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25]}
+                      component="div"
+                      count={cartItems.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </Box>
+                </>
+              ) : (
+                <CartEmpty />
+              )}
+            </Paper>
+          </Grid>
+
+          {cartItemsCount > 0 ? (
+            <Grid item className={classes.right}>
+              <Paper elevation={0} sx={{ marginLeft: '32px' }}>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={3} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                        Thanh toán
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={2}>Subtotal:</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 'bold' }}>
+                        {formatPrice(cartTotal)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={2}>Tax: {`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 'bold' }}>
+                        {formatPrice(invoiceTaxes)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={2} sx={{ borderBottom: 'none', paddingBottom: 0 }}>
+                        Total:
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          borderBottom: 'none',
+                          paddingBottom: 0,
+                          color: `${red[400]}`,
+                          fontSize: '22px',
+                        }}
+                      >
+                        {formatPrice(total)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={3} align="right" sx={{ paddingTop: 0, fontSize: '12px', color: '#333333' }}>
+                        (Đã bao gồm VAT nếu có)
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+                <Button sx={{ width: '100%' }} variant="contained" onClick={handleBtn}>
+                  CHECK OUT
+                </Button>
+              </Paper>
+            </Grid>
+          ) : null}
+        </Grid>
       </Container>
     </Box>
   );
