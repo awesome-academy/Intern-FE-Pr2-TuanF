@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import InputField from '../..//../../components/form-controls/InputField';
 import { useHistory } from 'react-router-dom';
+import { regex_phone } from '../../../../constants';
 
 function AddressForm(props) {
   const { t } = useTranslation();
@@ -17,15 +18,11 @@ function AddressForm(props) {
     .shape({
       fullname: yup
         .string()
-        .required('Please enter fullname')
-        .min(2, 'Mininum 2 characters')
-        .max(15, 'Maximum 15 characters'),
-      phone: yup
-        .string()
-        .required('Please enter number phone')
-        .min(10, 'Please enter valid phone number')
-        .max(10, 'Please enter valid phone number')
-        .typeError('Please enter number phone'),
+        .required('Please enter your full name.')
+        .test('Should has at least two words.', 'Please enter at least two words.', (value) => {
+          return value.split(' ').length >= 2;
+        }),
+      phone: yup.string().required('Please enter your phone.').matches(regex_phone, 'Must be a valid phone number'),
       district: yup.string().required('Please enter district').min(3, 'district is too short!'),
       ward: yup.string().required('Please enter ward/commune').min(2, 'ward is too short!'),
       address: yup.string().required('Please enter address').min(3, 'address is too short!'),

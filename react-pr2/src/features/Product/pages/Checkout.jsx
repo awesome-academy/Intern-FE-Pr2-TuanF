@@ -6,15 +6,13 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import AddressForm from '../../Cart/components/AddressForm';
 import PaymentForm from '../../Cart/components/PaymentForm';
 import Review from '../../Cart/components/Review';
-import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
-  const history = useHistory();
   const { t } = useTranslation();
 
   const steps = [`${t('Shipping address')}`, `${t('Payment details')}`, `${t('Review your order')}`];

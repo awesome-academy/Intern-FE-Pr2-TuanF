@@ -2,12 +2,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import QuantityField from '../../../../components/form-controls/QuantityField';
-import { useTranslation } from 'react-i18next';
+import ToggleAuth from '../../../../components/ToggleAuth';
+import { setOpen } from '../../../../store/Slice/userSlice';
 
 function AddToCartForm({ onSubmit = null }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
+
   const schema = yup
     .object()
     .shape({
@@ -27,7 +34,11 @@ function AddToCartForm({ onSubmit = null }) {
   });
 
   const handleSubmit = async (values) => {
-    onSubmit && onSubmit(values);
+    if (!isLoggedIn) {
+      dispatch(setOpen(true));
+    } else {
+      onSubmit && onSubmit(values);
+    }
   };
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -35,6 +46,7 @@ function AddToCartForm({ onSubmit = null }) {
       <Button type="submit" variant="contained" color="primary" style={{ width: '250px' }} size="large">
         {t('Add To Cart')}
       </Button>
+      <ToggleAuth />
     </form>
   );
 }

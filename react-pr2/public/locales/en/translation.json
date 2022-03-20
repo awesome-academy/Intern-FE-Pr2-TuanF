@@ -64,5 +64,17 @@
   "BACK": "BACK",
   "NEXT": "NEXT",
   "Review your order": "Review your order",
-  "Place order": "Place order"
+  "Place order": "Place order",
+  "Already an account. Login here": "Already an account. Login here",
+  "Don't have an account. Register here": "Don't have an account. Register here",
+  "Settings": "Settings",
+  "Add another account": "Add another account",
+  "My Account": "My Account",
+  "Create An Account": "Create An Account",
+  "Register successfully": "Register successfully !",
+  "Sign In": "Sign In",
+  "Password": "Password",
+  "Retype Password": "Retype Password",
+  "CHECK OUT": "CHECK OUT",
+  "Tax": "Tax"
 }

@@ -64,5 +64,17 @@
   "BACK": "QUAY LẠI",
   "NEXT": "TIẾP TỤC",
   "Review your order": "Xem lại đơn hàng của bạn",
-  "Place order": "Đặt hàng"
+  "Place order": "Đặt hàng",
+  "Already an account. Login here": "Đã có tài khoản. Đăng nhập tại đây",
+  "Don't have an account. Register here": "Chưa có tài khoản. Đăng kí tại đây",
+  "Settings": "Cài đặt",
+  "Add another account": "Thêm tài khoản khác",
+  "My Account": "Tài khoản của tôi",
+  "Create An Account": "Tạo một tài khoản",
+  "Register successfully": "Đăng kí thành công !",
+  "Sign In": "Đăng nhập",
+  "Password": "Mật khẩu",
+  "Retype Password": "Gõ lại mật khẩu",
+  "CHECK OUT": "THỦ TỤC THANH TOÁN",
+  "Tax": "Thuế"
 }

@@ -1,5 +1,6 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header/index';
+import Profile from './components/Profile';
 import CartFeature from './features/Cart';
 import ProductFeature from './features/Product';
 import Checkout from './features/Product/pages/Checkout';
@@ -15,6 +16,7 @@ function App() {
         <Route path="/products/:productId" component={DetailPage} />
         <Route path="/cart" component={CartFeature} />
         <Route path="/checkout" component={Checkout} />
+        <Route path="/account" component={Profile} />
       </Switch>
     </div>
   );

@@ -8,13 +8,16 @@ import './assets/styles/global.scss';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
 import store from './store/store';
+import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
   <Suspense fallback="">
     <Provider store={store}>
       <React.StrictMode>
         <BrowserRouter>
-          <App />
+          <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            <App />
+          </SnackbarProvider>
         </BrowserRouter>
       </React.StrictMode>
     </Provider>
