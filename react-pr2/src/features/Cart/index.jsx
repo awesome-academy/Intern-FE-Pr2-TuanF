@@ -220,24 +220,26 @@ export default function CartFeature() {
                   <TableBody>
                     <TableRow>
                       <TableCell colSpan={3} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
-                        Thanh toán
+                        {t('Payment')}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={2}>Subtotal:</TableCell>
+                      <TableCell colSpan={2}>{t('Subtotal')}:</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 'bold' }}>
                         {formatPrice(cartTotal)}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={2}>Tax: {`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+                      <TableCell colSpan={2}>
+                        {t('Tax')}: {(TAX_RATE * 100).toFixed(0)}%
+                      </TableCell>
                       <TableCell align="right" sx={{ fontWeight: 'bold' }}>
                         {formatPrice(invoiceTaxes)}
                       </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell colSpan={2} sx={{ borderBottom: 'none', paddingBottom: 0 }}>
-                        Total:
+                        {t('Total')}:
                       </TableCell>
                       <TableCell
                         align="right"
@@ -253,13 +255,13 @@ export default function CartFeature() {
                     </TableRow>
                     <TableRow>
                       <TableCell colSpan={3} align="right" sx={{ paddingTop: 0, fontSize: '12px', color: '#333333' }}>
-                        (Đã bao gồm VAT nếu có)
+                        ({t('VAT included')})
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
                 <Button sx={{ width: '100%' }} variant="contained" onClick={handleBtn}>
-                  CHECK OUT
+                  {t('CHECK OUT')}
                 </Button>
               </Paper>
             </Grid>
