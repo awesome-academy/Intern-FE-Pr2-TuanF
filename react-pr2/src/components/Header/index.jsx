@@ -52,16 +52,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header() {
+export default function Header({ queryParams }) {
   const classes = useStyles();
   const history = useHistory();
-
   const dispatch = useDispatch();
   const cartItemsCount = useSelector(cartItemCountSelector);
   const open = useSelector((state) => state.user.open);
   const showMiniCarts = useSelector((state) => state.cart.showMiniCart);
   const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser.id;
+  const isLoggedIn = !!loggedInUser.role;
 
   const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState('en');
@@ -108,15 +107,18 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const handleLogoutClick = () => {
-    const action = logout();
+  const handleLogoutClick = async () => {
+    const action = await logout();
     dispatch(action);
-    localStorage.removeItem('cart-list');
-    window.location.reload();
+    history.push('/');
   };
 
   const handleMyAccount = () => {
     history.push('/account');
+  };
+
+  const handleAdmin = () => {
+    history.push('/admin');
   };
 
   return (
@@ -130,7 +132,7 @@ export default function Header() {
               </Box>
             </Button>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              <SeacrchInput />
+              <SeacrchInput queryParams={queryParams} />
             </Typography>
             <Box className={classes.account}>
               <Button color="inherit" onClick={handleChangeLanguage}>
@@ -153,7 +155,7 @@ export default function Header() {
                       aria-haspopup="true"
                       aria-expanded={open ? 'true' : undefined}
                     >
-                      <Avatar sx={{ width: 32, height: 32 }}>T</Avatar>
+                      <Avatar sx={{ width: 32, height: 32 }}></Avatar>
                     </IconButton>
                   </Tooltip>
                 </Box>
@@ -206,13 +208,13 @@ export default function Header() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {loggedInUser.id !== 5694 ? (
+        {loggedInUser.role !== 1 ? (
           <MenuItem onClick={handleMyAccount}>
             <Avatar /> {t('My Account')}
           </MenuItem>
         ) : null}
-        {loggedInUser.id === 5694 ? (
-          <MenuItem>
+        {loggedInUser.role === 1 ? (
+          <MenuItem onClick={handleAdmin}>
             <Avatar /> ADMIN
           </MenuItem>
         ) : null}

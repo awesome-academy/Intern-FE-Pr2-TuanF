@@ -1,9 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { categoryAPI } from '../../../../store/Slice/categorySlice';
+import { useSelector } from 'react-redux';
 import { themeStyle } from '../../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,16 +27,7 @@ const useStyles = makeStyles((theme) => ({
 function FilterByCategory({ onChange }) {
   const classes = useStyles();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const { category } = useSelector((state) => state.categories);
-  const categories = category.map(({ id, name }) => ({
-    id,
-    name,
-  }));
-
-  useEffect(() => {
-    dispatch(categoryAPI());
-  }, [dispatch]);
 
   const handleCategoryClick = (category) => {
     onChange && onChange(category);
@@ -46,11 +36,10 @@ function FilterByCategory({ onChange }) {
   return (
     <Box className={classes.root}>
       <Typography variant="subtitle2">{t('Product category')}</Typography>
-
       <ul className={classes.menu}>
-        {categories.map((category) => (
-          <li key={category.id} onClick={() => handleCategoryClick(category)}>
-            <Typography variant="body2">{category.name}</Typography>
+        {category.map((item) => (
+          <li key={item.id} onClick={() => handleCategoryClick(item)}>
+            <Typography variant="body2">{item.name}</Typography>
           </li>
         ))}
       </ul>

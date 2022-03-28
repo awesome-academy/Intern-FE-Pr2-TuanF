@@ -4,13 +4,16 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import InputField from '../..//../../components/form-controls/InputField';
+import InputField from '../../../../components/form-controls/InputField';
 import { useHistory } from 'react-router-dom';
 import { regex_phone } from '../../../../constants';
+import StorageKeys from '../../../../constants/storage-keys';
 
 function AddressForm(props) {
   const { t } = useTranslation();
   const history = useHistory();
+  const info = JSON.parse(localStorage.getItem('info'));
+  const { fullName, phone } = JSON.parse(localStorage.getItem(StorageKeys.USER));
 
   const { onSubmit, activeStep, steps } = props;
   const schema = yup
@@ -31,11 +34,11 @@ function AddressForm(props) {
 
   const form = useForm({
     defaultValues: {
-      fullname: '',
-      phone: '',
-      district: '',
-      ward: '',
-      address: '',
+      fullname: info ? info.fullname : `${fullName}`,
+      phone: info ? info.phone : `${phone}`,
+      district: info ? info.district : '',
+      ward: info ? info.ward : '',
+      address: info ? info.address : '',
     },
     resolver: yupResolver(schema),
   });
@@ -50,7 +53,7 @@ function AddressForm(props) {
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       {t('Shipping address')}
-      <InputField name="fullname" label={`${t('Fullname')}`} form={form} />
+      <InputField name="fullname" label={`${t('Fullname')}`} form={form} disable />
       <InputField name="phone" label={`${t('Number Phone')}`} form={form} />
       <InputField name="district" label={`${t('District')}`} form={form} />
       <InputField name="ward" label={`${t('Ward')}`} form={form} />

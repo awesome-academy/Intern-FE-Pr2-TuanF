@@ -45,6 +45,7 @@ function DetailPage(props) {
   const [value, setValue] = useState('1');
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
   const {
     params: { productId },
   } = useRouteMatch();
@@ -75,7 +76,7 @@ function DetailPage(props) {
   return (
     <Box className={classes.root}>
       <Container>
-        {isLoading ? <ProductSkeletonByFilters length={1} /> : <DetailBreadcrumb product={product} />}
+        {isLoading ? <ProductSkeletonByFilters length={1} /> : <DetailBreadcrumb {...product} />}
         <Paper elevation={0}>
           <Grid container>
             <Grid item className={classes.left}>

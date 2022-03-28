@@ -47,14 +47,14 @@ function RegisterForm(props) {
       .required('Please enter your email.')
       .matches(regex_email, 'Please enter a valid email, without special characters and ending in @xyz.com'),
     phone: yup.string().required('Please enter your phone.').matches(regex_phone, 'Must be a valid phone number'),
-    registerPassword: yup
+    password: yup
       .string()
       .required('Please enter your password.')
       .matches(
         regex_password,
         'Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character!'
       ),
-    password: yup
+    retypePassword: yup
       .string()
       .required('Please retype your password.')
       .oneOf([yup.ref('password')], 'Password does not match.'),
@@ -70,6 +70,7 @@ function RegisterForm(props) {
     reValidateMode: 'onSubmit',
     resolver: yupResolver(schema),
   });
+
   const handleSubmit = async (values) => {
     await slowLoading();
     const { onSubmit } = props;

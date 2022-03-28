@@ -1,7 +1,7 @@
-import { STATIC_HOST, THUMBNAIL_PLACEHOLDER } from '../constants';
+import { THUMBNAIL_PLACEHOLDER } from '../constants';
 
 export const thumbnailURL = (thumbnail) => {
-  return thumbnail ? `${STATIC_HOST}${thumbnail?.url}` : THUMBNAIL_PLACEHOLDER;
+  return thumbnail ? thumbnail : THUMBNAIL_PLACEHOLDER;
 };
 
 export const promotion = (promotionPercent) => {

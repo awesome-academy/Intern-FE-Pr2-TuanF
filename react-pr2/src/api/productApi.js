@@ -8,11 +8,11 @@ const productApi = {
     // Remove un-needed key
     delete newParams._page;
     // Fetch product list + count
-    const productList = await axiosClient.get('/products', { params: newParams });
-    const count = await axiosClient.get('/products/count', { params: newParams });
+    const { data, headers } = await axiosClient.get('/products', { params: newParams });
+    const count = headers['x-total-count'];
     // Build response and return
     return {
-      data: productList,
+      data: data,
       pagination: {
         page: params._page,
         limit: params._limit,
@@ -22,7 +22,8 @@ const productApi = {
   },
   get(id) {
     const url = `/products/${id}`;
-    return axiosClient.get(url);
+    const res = axiosClient.get(url);
+    return res;
   },
 };
 

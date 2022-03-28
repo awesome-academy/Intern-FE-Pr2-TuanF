@@ -1,36 +1,26 @@
+import { Box } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import ReactImageMagnify from 'react-image-magnify';
-import { makeStyles } from '@mui/styles';
-import { blue } from '@mui/material/colors';
-import { Box } from '@mui/material';
 import { thumbnailURL } from '../../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
-  smallImage: {
-    paddingTop: '12px',
-    borderRadius: '4px',
-  },
-  active: {
-    borderColor: blue[700],
-  },
   enlargedImage: {
     position: 'relative',
     zIndex: 100,
   },
+  thumbnail: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
 }));
 
 function ProductThumbnail({ product = {} }) {
-  const { thumbnail, name } = product;
+  const { name, images = '' } = product;
   const classes = useStyles();
 
-  const handleClickImg = (e) => {
-    const elementImg = e.target;
-    if (elementImg.classList.contains('active')) {
-      elementImg.classList.remove('active');
-    } else {
-      elementImg.classList.add('active');
-    }
-  };
+  const handleClickImg = (e) => {};
 
   return (
     <Box>
@@ -39,18 +29,29 @@ function ProductThumbnail({ product = {} }) {
           smallImage: {
             alt: `${name}`,
             isFluidWidth: true,
-            src: `${thumbnailURL(thumbnail)}`,
+            src: `${images[0]}`,
           },
           largeImage: {
-            src: `${thumbnailURL(thumbnail)}`,
+            src: `${images[0]}`,
             width: 1200,
             height: 1800,
           },
         }}
         enlargedImageClassName={classes.enlargedImage}
       />
-      <Box className={classes.smallImage && classes.active} onClick={handleClickImg}>
-        <img src={thumbnailURL(thumbnail)} alt={name} width="20%" />
+      <Box className={classes.thumbnail}>
+        {images &&
+          images.slice(0, 4).map((image, indx) => {
+            return (
+              <Box
+                onClick={handleClickImg}
+                key={indx}
+                sx={{ width: '25%', border: '1px solid red', cursor: 'pointer' }}
+              >
+                <img src={thumbnailURL(image)} alt={name} width="100%" />
+              </Box>
+            );
+          })}
       </Box>
     </Box>
   );

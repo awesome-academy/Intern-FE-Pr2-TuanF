@@ -1,3 +1,4 @@
+import { SnackbarProvider } from 'notistack';
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -8,7 +9,6 @@ import './assets/styles/global.scss';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
 import store from './store/store';
-import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
   <Suspense fallback="">

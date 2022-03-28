@@ -4,7 +4,7 @@ import productApi from '../../api/productApi';
 const productDetailSlice = createSlice({
   name: 'productId',
   initialState: {
-    productDetail: {},
+    productDetail: [],
     isLoading: true,
   },
   reducers: {},
@@ -14,9 +14,9 @@ const productDetailSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(productApiId.fulfilled, (state, action) => {
-        const { productID, product } = action.payload;
+        const { productID, data } = action.payload;
         state.isLoading = false;
-        state.productDetail = { ...state.productDetail, [productID]: product };
+        state.productDetail = { ...state.productDetail, [productID]: data };
       })
       .addCase(productApiId.rejected, (state) => {
         state.isLoading = false;
@@ -26,8 +26,8 @@ const productDetailSlice = createSlice({
 
 export const productApiId = createAsyncThunk('productId/getId', async (productID) => {
   try {
-    const product = await productApi.get(productID);
-    return { productID, product };
+    const { data } = await productApi.get(productID);
+    return { productID, data };
   } catch (error) {
     return error;
   }
