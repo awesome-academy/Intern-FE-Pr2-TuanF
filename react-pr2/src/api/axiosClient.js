@@ -2,7 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 const axiosClient = axios.create({
-  baseURL: 'https://api.ezfrontend.com/',
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'content-type': 'application/json',
   },
@@ -23,19 +23,9 @@ axiosClient.interceptors.request.use(
 // Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response) {
-    return response.data;
+    return response;
   },
   function (error) {
-    const { config, status, data } = error.response;
-    const URLs = ['/auth/local/register', '/auth/local'];
-    if (URLs.includes(config.url) && status === 400) {
-      const errorList = data.data || [];
-      const firstError = errorList.length > 0 ? errorList[0] : {};
-      const messageList = firstError.messages || [];
-      const firstMessage = messageList.length > 0 ? messageList[0] : {};
-
-      throw new Error(firstMessage.message);
-    }
     return Promise.reject(error);
   }
 );

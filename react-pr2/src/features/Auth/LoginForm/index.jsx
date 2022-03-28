@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import InputField from '../../../components/form-controls/InputField';
 import PasswordField from '../../../components/form-controls/PasswordField';
-import { slowLoading } from '../../../utils/utils';
 import { regex_email } from '../../../constants/';
+import { slowLoading } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +36,7 @@ function LoginForm(props) {
   const { t } = useTranslation();
 
   const schema = yup.object().shape({
-    identifier: yup
+    email: yup
       .string()
       .required('Please enter your email.')
       .matches(regex_email, 'Please enter a valid email, without special characters and ending in @xyz.com'),
@@ -44,7 +44,7 @@ function LoginForm(props) {
   });
   const form = useForm({
     defaultValues: {
-      identifier: '',
+      email: '',
       password: '',
     },
     reValidateMode: 'onSubmit',
@@ -72,7 +72,7 @@ function LoginForm(props) {
         {t('Sign In')}
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField name="identifier" label="Email" form={form} />
+        <InputField name="email" label="Email" form={form} />
         <PasswordField name="password" label={t('Password')} form={form} />
 
         <Button

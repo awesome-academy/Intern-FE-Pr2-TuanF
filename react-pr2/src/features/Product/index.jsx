@@ -2,10 +2,10 @@ import { Box } from '@mui/material';
 import React from 'react';
 import ListPage from './pages/ListPage';
 
-function ProductFeature(props) {
+function ProductFeature({ queryParams }) {
   return (
     <Box>
-      <ListPage />
+      <ListPage queryParams={queryParams} />
     </Box>
   );
 }

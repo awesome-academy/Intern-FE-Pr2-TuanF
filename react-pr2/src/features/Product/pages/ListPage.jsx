@@ -1,18 +1,19 @@
 import { Box, Container, Grid, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import queryString from 'query-string';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { categoryAPI } from '../../../store/Slice/categorySlice';
 import { productAPI } from '../../../store/Slice/productSlice';
 import FilterViewer from '../components/Filters/FilterViewer';
+import ProductSkeletonByFilters from '../components/Filters/ProductSkeletonByFilters';
+import ProductBanner from '../components/ProductBanner';
 import ProductFilters from '../components/ProductFilters';
 import ProductList from '../components/ProductList';
 import ProductPagination from '../components/ProductPagination';
-import ProductSkeletonByFilters from '../components/Filters/ProductSkeletonByFilters';
 import ProductSkeletonList from '../components/ProductSkeletonList';
 import ProductSoft from '../components/ProductSoft';
-import ProductBanner from '../components/ProductBanner';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -33,29 +34,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListPage(props) {
+function ListPage({ queryParams }) {
   const classes = useStyles();
 
   const history = useHistory();
-  const location = useLocation();
-  const queryParams = useMemo(() => {
-    const params = queryString.parse(location.search);
-    return {
-      ...params,
-      _page: Number.parseInt(params._page) || 1,
-      _limit: Number.parseInt(params._limit) || 12,
-      _sort: params._sort || 'salePrice:ASC',
-      isPromotion: params.isPromotion === 'true',
-      isFreeShip: params.isFreeShip === 'true',
-    };
-  }, [location.search]);
-
   const dispatch = useDispatch();
   const { product, isLoading } = useSelector((state) => state.products);
   const { data = [], pagination } = product;
 
   useEffect(() => {
     dispatch(productAPI(queryParams));
+    dispatch(categoryAPI());
   }, [queryParams, dispatch]);
 
   const handlePageChange = (page) => {
@@ -72,7 +61,7 @@ function ListPage(props) {
   const handleSoftChange = (newSortValue) => {
     const filters = {
       ...queryParams,
-      _sort: newSortValue,
+      _order: newSortValue,
       _page: 1,
     };
     history.push({
@@ -121,7 +110,7 @@ function ListPage(props) {
                 </>
               ) : (
                 <>
-                  <ProductSoft currentSoft={queryParams._sort} onChange={handleSoftChange} />
+                  <ProductSoft currentSoft={queryParams._order} onChange={handleSoftChange} />
                   <FilterViewer filters={queryParams} onChange={setNewFilters} />
                   <ProductList data={data} />
                 </>

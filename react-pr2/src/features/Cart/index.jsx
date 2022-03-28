@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, Container, Grid } from '@mui/material';
+import { Button, Container, Grid, Dialog, DialogContent } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import { red } from '@mui/material/colors';
@@ -27,6 +27,10 @@ import Quantity from './components/Quantity';
 import './index.scss';
 import { cartItemCountSelector, cartItemSelector, cartTotaltSelector } from './selectors';
 import { TAX_RATE } from './constants';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -62,9 +66,12 @@ export default function CartFeature() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { t } = useTranslation();
   const history = useHistory();
+  const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const cartItemsCount = useSelector(cartItemCountSelector);
   const cartItems = useSelector(cartItemSelector);
+
   const cartTotal = useSelector(cartTotaltSelector);
 
   const handleSelectAllClick = (event) => {
@@ -101,8 +108,18 @@ export default function CartFeature() {
     setPage(0);
   };
 
-  const handleDeleteItem = (event, id) => {
+  const handleConfirmDelete = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDeleItem = async (id) => {
+    setOpen(false);
     dispatch(removeFromCart(id));
+    enqueueSnackbar(`${t('Delete successfully')}`, { variant: 'success' });
   };
 
   const handleBtn = () => {
@@ -134,7 +151,7 @@ export default function CartFeature() {
                         <TableBody>
                           {cartItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                             const { product, quantity } = row;
-                            const { salePrice, originalPrice, promotionPercent, name, thumbnail, id } = product;
+                            const { salePrice, originalPrice, promotionPercent, name, images, id } = product;
                             const isItemSelected = isSelected(id);
                             const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -159,7 +176,7 @@ export default function CartFeature() {
                                 </TableCell>
                                 <TableCell component="th" id={labelId} scope="row" padding="none">
                                   <Box className={classes.thumbnail}>
-                                    <img src={thumbnailURL(thumbnail)} alt={name} width="80px" />
+                                    <img src={thumbnailURL(images[0])} alt={name} width="80px" />
                                     <Box ml={2}>{name}</Box>
                                   </Box>
                                 </TableCell>
@@ -178,17 +195,38 @@ export default function CartFeature() {
                                 <TableCell align="center">
                                   <Quantity id={id} quantity={quantity} />
                                 </TableCell>
-                                <TableCell align="left">
+                                <TableCell align="center">
                                   <Box component="span" className={classes.totalItem}>
                                     {formatPrice(salePrice * quantity)}
                                   </Box>
                                 </TableCell>
                                 <TableCell align="right">
                                   <Tooltip title={t('Delete')}>
-                                    <IconButton onClick={(event) => handleDeleteItem(event, id)}>
+                                    <IconButton onClick={handleConfirmDelete}>
                                       <DeleteIcon />
                                     </IconButton>
                                   </Tooltip>
+                                  <div>
+                                    <Dialog
+                                      open={open}
+                                      onClose={handleClose}
+                                      aria-labelledby="alert-dialog-title"
+                                      aria-describedby="alert-dialog-description"
+                                    >
+                                      <DialogTitle id="alert-dialog-title">
+                                        {'Do you confirm product deletion?'}
+                                      </DialogTitle>
+                                      <DialogContent>
+                                        <DialogContentText id="alert-dialog-description"></DialogContentText>
+                                      </DialogContent>
+                                      <DialogActions>
+                                        <Button onClick={handleClose}>Disagree</Button>
+                                        <Button onClick={() => handleDeleItem(id)} autoFocus>
+                                          Agree
+                                        </Button>
+                                      </DialogActions>
+                                    </Dialog>
+                                  </div>
                                 </TableCell>
                               </TableRow>
                             );

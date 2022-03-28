@@ -1,8 +1,13 @@
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { alpha, styled } from '@mui/material/styles';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { productAPI } from '../../../store/Slice/productSlice';
+import useDebounce from '../../hooks/useDebounce';
+import queryString from 'query-string';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -44,15 +49,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Filter() {
+export default function Filter({ queryParams }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const history = useHistory();
+
+  const handleSearchInput = async (e) => {
+    const value = await e.target.value;
+    setSearchTerm(value);
+  };
+
+  useEffect(() => {
+    const filters = {
+      ...queryParams,
+      name_like: searchTerm,
+    };
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filters),
+    });
+    dispatch(productAPI(queryParams));
+  }, [debouncedSearchTerm, history, queryParams, dispatch]);
 
   return (
     <Search>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
-      <StyledInputBase placeholder={t('Search')} inputProps={{ 'aria-label': 'search' }} />
+      <StyledInputBase
+        placeholder={t('Search')}
+        inputProps={{ 'aria-label': 'search' }}
+        onChange={handleSearchInput}
+        value={searchTerm}
+      />
     </Search>
   );
 }

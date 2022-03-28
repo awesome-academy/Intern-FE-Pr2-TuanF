@@ -3,19 +3,24 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import queryString from 'query-string';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleMiniCartClick } from '../../../../store/Slice/cartSlice';
+import { getCategoryItem } from '../../../../store/Slice/categorySlice';
 
-export default function DetailBreadcrumb({ product = {} }) {
-  const { category = '' } = product;
-  const { name, id } = category;
+export default function DetailBreadcrumb({ name, categoryId }) {
   const history = useHistory();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const { id, name: nameLink } = useSelector((state) => state.categories.categoryItem);
+
+  useEffect(() => {
+    categoryId && dispatch(getCategoryItem(categoryId));
+  }, [categoryId, dispatch]);
 
   function handleClickHome(event) {
     event.preventDefault();
@@ -28,9 +33,10 @@ export default function DetailBreadcrumb({ product = {} }) {
     const filters = {
       _limit: 12,
       _page: 1,
-      _sort: 'salePrice:ASC',
-      'category.id': id,
-      'category.name': name,
+      _sort: 'salePrice',
+      _order: 'asc',
+      categoryId: id,
+      'category.name': `${nameLink}`,
     };
     const params = queryString.stringify(filters);
     history.push(`/?${params}`);
@@ -38,14 +44,14 @@ export default function DetailBreadcrumb({ product = {} }) {
   }
 
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="inherit" href="/" onClick={handleClickHome}>
+    <Link underline="hover" key="1" color="inherit" href="" onClick={handleClickHome}>
       {t('Home')}
     </Link>,
     <Link underline="hover" key="3" color="inherit" href="" onClick={handleClickName}>
-      {name}
+      {nameLink}
     </Link>,
     <Typography key="4" color="text.primary">
-      {product['name']}
+      {name}
     </Typography>,
   ];
 

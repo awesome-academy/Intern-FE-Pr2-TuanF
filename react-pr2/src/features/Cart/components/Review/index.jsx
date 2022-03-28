@@ -6,18 +6,27 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { formatPrice } from '../../../../utils/utils';
 import { cartTotaltSelector } from '../../selectors';
 import { useTranslation } from 'react-i18next';
 import { TAX_RATE } from '../../constants';
+import { orders } from '../../../../store/Slice/cartSlice';
+import StorageKeys from '../../../../constants/storage-keys';
 
 export default function Review({ activeStep, steps, handleBack, setActiveStep }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const cartTotal = useSelector(cartTotaltSelector);
   const SHIPPING_FEE = cartTotal > 0 ? 15000 : 0;
   const subTotal = cartTotal * TAX_RATE + cartTotal;
   const total = subTotal + SHIPPING_FEE;
+
+  const { email } = JSON.parse(localStorage.getItem(StorageKeys.USER));
+  const info = JSON.parse(localStorage.getItem('info'));
+  const { address, fullname, district, phone } = info;
+
+  const cartItemLocalStorage = JSON.parse(localStorage.getItem('cart-list'));
 
   const payments = [
     { name: `${t('Card type')}`, detail: 'Visa' },
@@ -31,6 +40,15 @@ export default function Review({ activeStep, steps, handleBack, setActiveStep })
   };
 
   const handleNext = () => {
+    const newInfo = { ...info, status: 'Pending', email };
+    const action = {
+      cart: [...cartItemLocalStorage],
+      ...newInfo,
+      total,
+    };
+    dispatch(orders(action));
+    localStorage.removeItem('cart-list');
+    localStorage.removeItem('info');
     setActiveStep(activeStep + 1);
   };
 
@@ -87,9 +105,9 @@ export default function Review({ activeStep, steps, handleBack, setActiveStep })
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             {t('Shipping')}
           </Typography>
-          <Typography gutterBottom>{`${t('Fullname')}: NGUYỄN ANH TUẤN`}</Typography>
-          <Typography gutterBottom>{`${t('Number Phone')}: 0399873636`}</Typography>
-          <Typography gutterBottom>{`${t('Address')}: Số 6, Ngô Gia Khảm, Hà Đông`}</Typography>
+          <Typography gutterBottom>{`${t('Fullname')}: ${fullname}`}</Typography>
+          <Typography gutterBottom>{`${t('Number Phone')}: ${phone}`}</Typography>
+          <Typography gutterBottom>{`${t('Address')}: ${address}, ${district} `}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>

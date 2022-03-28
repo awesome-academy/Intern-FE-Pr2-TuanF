@@ -36,14 +36,11 @@ export default function Checkout() {
     if (values) {
       setActiveStep(activeStep + 1);
     }
+    localStorage.setItem('info', JSON.stringify(values));
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
-  };
-
-  const handleCartClick = () => {
-    localStorage.removeItem('cart-list');
   };
 
   return (
@@ -70,7 +67,7 @@ export default function Checkout() {
                   'We have emailed your order confirmation, and will send you an update when your order has shipped.'
                 )}`}
               </Typography>
-              <Button variant="contained" href="/" onClick={handleCartClick} sx={{ width: '100%', marginTop: '32px' }}>
+              <Button variant="contained" href="/" sx={{ width: '100%', marginTop: '32px' }}>
                 {t('CONTINUE SHOPPING US PRODUCTS')}
               </Button>
             </Box>

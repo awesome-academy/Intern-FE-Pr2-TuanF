@@ -19,13 +19,15 @@ const useStyles = makeStyles((theme) => ({
 function ProductSoft({ currentSoft, onChange }) {
   const classes = useStyles();
   const { t } = useTranslation();
+
   const handleSortChange = (e, newValue) => {
     if (onChange) onChange(newValue);
   };
+
   return (
     <Tabs value={currentSoft} onChange={handleSortChange} aria-label="disabled tabs example" className={classes.root}>
-      <Tab label={t('Price low to high')} value="salePrice:ASC" className={classes.hover}></Tab>
-      <Tab label={t('Price high to low')} value="salePrice:DESC" className={classes.hover}></Tab>
+      <Tab label={t('Price low to high')} value="asc" className={classes.hover}></Tab>
+      <Tab label={t('Price high to low')} value="desc" className={classes.hover}></Tab>
     </Tabs>
   );
 }

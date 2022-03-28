@@ -1,23 +1,40 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { Button, Dialog, DialogContent } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import { alpha } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import { useSnackbar } from 'notistack';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { removeMultiple } from '../../../store/Slice/cartSlice';
-import { useTranslation } from 'react-i18next';
 
 function EnhancedTableToolbar({ numSelected, selected }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleDeleteAll = (event, selected) => {
+  const handleConfirmDelete = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpen(false);
+  };
+
+  const handleDeleteSelectItem = (selected) => {
+    setOpen(false);
     selected.forEach((item) => {
       dispatch(removeMultiple(item));
     });
+    enqueueSnackbar(`${t('Delete successfully')}`, { variant: 'success' });
   };
 
   return (
@@ -41,11 +58,30 @@ function EnhancedTableToolbar({ numSelected, selected }) {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title={t('Delete')}>
-          <IconButton onClick={(event) => handleDeleteAll(event, selected)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Tooltip title={t('Delete')}>
+            <IconButton onClick={(event) => handleConfirmDelete(event, selected)}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <Dialog
+            open={open}
+            onClose={handleCloseDelete}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{'Do you confirm product deletion?'}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description"></DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDelete}>Disagree</Button>
+              <Button onClick={() => handleDeleteSelectItem(selected)} autoFocus>
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
       ) : (
         <Tooltip title={t('Filter list')}>
           <IconButton>

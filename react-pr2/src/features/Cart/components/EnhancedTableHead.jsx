@@ -36,7 +36,7 @@ function EnhancedTableHead(props) {
         <TableCell align="center" padding="normal">
           {t('Quantity')}
         </TableCell>
-        <TableCell align="left" padding="normal">
+        <TableCell align="center" padding="normal">
           {t('Into Money')}
         </TableCell>
         <TableCell align="right" padding="normal">

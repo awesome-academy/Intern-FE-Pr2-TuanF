@@ -12,7 +12,7 @@ function ProductFilters({ filters, onChange }) {
   const handleCategoryChange = (newCategory) => {
     if (!onChange) return;
     const newFilters = {
-      'category.id': newCategory.id,
+      categoryId: newCategory.id,
       'category.name': newCategory.name,
     };
     onChange(newFilters);

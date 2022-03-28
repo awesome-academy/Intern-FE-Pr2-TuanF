@@ -1,21 +1,47 @@
-import userApi from '../../api/userApi';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import userApi from '../../api/userApi';
 import StorageKeys from '../../constants/storage-keys';
+import { auth } from '../../firebase';
+import { signOut } from 'firebase/auth';
 
-export const register = createAsyncThunk('user/register', async (payload) => {
-  const data = await userApi.register(payload);
-
-  localStorage.setItem(StorageKeys.TOKEN, data.jwt);
-  localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
-  return data.user;
+export const register = createAsyncThunk('user/register', async (user) => {
+  try {
+    const res = await userApi.register(user);
+    const { email, fullName, id, phone, role } = res.data;
+    localStorage.setItem(StorageKeys.USER, JSON.stringify({ email, id, fullName, role, phone }));
+    return res.data;
+  } catch (err) {
+    return err;
+  }
 });
 
-export const login = createAsyncThunk('user/login', async (payload) => {
-  const data = await userApi.login(payload);
+export const login = createAsyncThunk('user/login', async (id) => {
+  try {
+    const res = await userApi.get(id);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+});
 
-  localStorage.setItem(StorageKeys.TOKEN, data.jwt);
-  localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
-  return data.user;
+// update info user
+export const updateInfoUser = createAsyncThunk('user/updateInfo', async (data) => {
+  try {
+    const res = await userApi.update(data);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
+});
+
+// get user login
+export const getUserLogin = createAsyncThunk('user/updateInfo', async (data) => {
+  try {
+    const res = await userApi.get(data);
+    return res.data;
+  } catch (err) {
+    return err;
+  }
 });
 
 const userSlice = createSlice({
@@ -23,11 +49,12 @@ const userSlice = createSlice({
   initialState: {
     current: JSON.parse(localStorage.getItem(StorageKeys.USER)) || {},
     open: false,
+    info: [],
   },
   reducers: {
     logout(state) {
+      signOut(auth);
       localStorage.removeItem(StorageKeys.USER);
-      localStorage.removeItem(StorageKeys.TOKEN);
       state.current = {};
     },
     setOpen(state, action) {
@@ -35,11 +62,22 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
-    [register.fulfilled]: (state, action) => {
-      state.current = action.payload;
-    },
     [login.fulfilled]: (state, action) => {
+      const { email, fullName, id, phone, role } = action.payload;
       state.current = action.payload;
+      localStorage.setItem(
+        StorageKeys.USER,
+        JSON.stringify({
+          id,
+          fullName,
+          email,
+          phone,
+          role,
+        })
+      );
+    },
+    [getUserLogin.fulfilled]: (state, action) => {
+      state.info = action.payload;
     },
   },
 });

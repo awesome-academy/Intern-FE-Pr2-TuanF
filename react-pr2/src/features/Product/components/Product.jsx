@@ -38,7 +38,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-function Product({ thumbnail, name, salePrice, promotionPercent, id }) {
+function Product({ images, name, salePrice, promotionPercent, id }) {
   const classes = useStyle();
   const history = useHistory();
 
@@ -49,7 +49,7 @@ function Product({ thumbnail, name, salePrice, promotionPercent, id }) {
   return (
     <Box className={classes.root} onClick={handleClick}>
       <Box className={classes.img}>
-        <img src={thumbnailURL(thumbnail)} alt={name} width="100%" />
+        <img src={thumbnailURL(images[0])} alt={name} width="100%" />
       </Box>
       <Box className={classes.bottom}>
         <Typography variant="body2" className={classes.name}>
